@@ -5,6 +5,7 @@ import urllib2
 import re
 import thread
 import time
+import MySQLdb
 
 class FH:
 
@@ -41,6 +42,21 @@ class FH:
             print(item[0])
             print(item[1])
             print(item[2])
+            conn= MySQLdb.connect(
+            host='localhost',
+            port = 3306,
+            user='root',
+            passwd='94159415',
+            db ='movie',
+            charset='utf8'
+        )
+            cur = conn.cursor()
+
+            cur.execute("insert into A_STOCK_LIST VALUES (NULL,'%s','%s','%s')"%(item[0],item[1],item[2]))
+
+            cur.close()
+            conn.commit()
+            conn.close()
         return pagelist
 
     def loadPage(self):
@@ -56,7 +72,7 @@ class FH:
         self.loadPage()
         nowPage = 0
         pagelist = self.list[0]
-        while nowPage<15:
+        while nowPage<24:
                 nowPage +=1
                 del self.list[0]
                 self.loadPage()
