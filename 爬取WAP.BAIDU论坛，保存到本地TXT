@@ -1,0 +1,41 @@
+# -*- coding:utf-8 -*-
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
+import urllib
+import urllib2
+import requests
+import sys
+reload(sys)
+sys.setdefaultencoding("utf-8")
+
+from lxml import etree
+import json
+
+
+def spider():
+    i=0
+    yulu=[]
+    for i in range(0,38):
+        url='http://tieba.baidu.com/mo/q---E69E1F2CE3B3F602E8A4E9DBB498F420%3AFG%3D1--1-1-0--2--wapp_1492841547755_799/m?kz=4668253092&new_word=&pn={}0&lp=6005'.format(i)
+        html=requests.get(url)
+        select=etree.HTML(html.content)
+        content_field=select.xpath('//div[@class="d"]')
+        print u'新一页'
+
+        items=list()
+        for each in content_field:
+            content=each.xpath('//div[@class="i"]/text()')
+
+            items=content
+            for j in range(0,30):
+                print items[j]
+                yulu.append(items[j])
+    print yulu
+    with open('data2.txt', 'wb') as f:
+        for item in yulu:
+            line =item + '\n'
+            f.write(line.encode('utf-8'))
+
+
+spider()
